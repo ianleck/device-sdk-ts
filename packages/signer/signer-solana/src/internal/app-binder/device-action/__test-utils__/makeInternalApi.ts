@@ -12,5 +12,12 @@ export function makeDeviceActionInternalApiMock(): Mocked<InternalApi> {
     getManagerApiService: vi.fn(),
     getSecureChannelService: vi.fn(),
     disableRefresher: vi.fn(),
+    loggerFactory: vi.fn((_tag: string) => ({
+      debug: vi.fn(),
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      subscribers: [],
+    })),
   };
 }

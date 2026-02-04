@@ -61,6 +61,9 @@ export class DeviceSession {
   private readonly _managerApiService: ManagerApiService;
   private readonly _secureChannelService: SecureChannelService;
   private readonly _logger: LoggerPublisherService;
+  private readonly _loggerModuleFactory: (
+    tag: string,
+  ) => LoggerPublisherService;
   private readonly _refresherOptions: DeviceSessionRefresherOptions;
   private _pinger: DevicePinger;
   private _deviceSessionRefresher: DeviceSessionRefresher;
@@ -77,6 +80,7 @@ export class DeviceSession {
   ) {
     this._id = id;
     this._connectedDevice = connectedDevice;
+    this._loggerModuleFactory = loggerModuleFactory;
     this._logger = loggerModuleFactory("device-session");
     this._managerApiService = managerApiService;
     this._secureChannelService = secureChannelService;
@@ -250,6 +254,7 @@ export class DeviceSession {
         this._refresherService.disableRefresher(blockerId),
       getManagerApiService: () => this._managerApiService,
       getSecureChannelService: () => this._secureChannelService,
+      loggerFactory: this._loggerModuleFactory,
     });
     return { observable, cancel };
   }

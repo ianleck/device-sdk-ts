@@ -208,6 +208,7 @@ describe("BuildEIP712ContextTask", () => {
         message: TEST_MESSAGE_VALUES,
       }),
     );
+    contextModuleMock.getContexts.mockResolvedValueOnce([]);
     apiMock.getDeviceSessionState.mockReturnValueOnce({
       sessionStateType: DeviceSessionStateType.ReadyWithoutSecureChannel,
       deviceStatus: DeviceStatus.CONNECTED,
@@ -222,7 +223,7 @@ describe("BuildEIP712ContextTask", () => {
     expect(builtContext).toStrictEqual({
       deviceModelId: DeviceModelId.NANO_S,
       derivationPath: "44'/60'/0'/0/0",
-      transactionChecks: undefined,
+      additionalContexts: [],
       types: TEST_TYPES,
       domain: TEST_DOMAIN_VALUES,
       message: TEST_MESSAGE_VALUES,
@@ -267,12 +268,13 @@ describe("BuildEIP712ContextTask", () => {
       error: new Error("no filter"),
     });
     // WHEN
+    contextModuleMock.getContexts.mockResolvedValueOnce([]);
     const builtContext = await task.run();
     // THEN
     expect(builtContext).toStrictEqual({
       deviceModelId: DeviceModelId.FLEX,
       derivationPath: "44'/60'/0'/0/0",
-      transactionChecks: undefined,
+      additionalContexts: [],
       types: TEST_TYPES,
       domain: TEST_DOMAIN_VALUES,
       message: TEST_MESSAGE_VALUES,
@@ -326,7 +328,7 @@ describe("BuildEIP712ContextTask", () => {
     expect(builtContext).toStrictEqual({
       deviceModelId: DeviceModelId.FLEX,
       derivationPath: "44'/60'/0'/0/0",
-      transactionChecks: undefined,
+      additionalContexts: [],
       types: TEST_TYPES,
       domain: TEST_DOMAIN_VALUES,
       message: TEST_MESSAGE_VALUES,
@@ -404,7 +406,7 @@ describe("BuildEIP712ContextTask", () => {
       message: TEST_MESSAGE_VALUES,
       clearSignContext: Just(TEST_CLEAR_SIGN_CONTEXT),
       calldatasContexts: {},
-      transactionChecks: txCheckContext,
+      additionalContexts: [txCheckContext],
       logger: mockLogger,
     });
   });
@@ -439,6 +441,7 @@ describe("BuildEIP712ContextTask", () => {
       deviceModelId: DeviceModelId.FLEX,
       isSecureConnectionAllowed: false,
     });
+    contextModuleMock.getContexts.mockResolvedValueOnce([]);
     contextModuleMock.getTypedDataFilters.mockResolvedValueOnce(
       TEST_CLEAR_SIGN_CONTEXT,
     );
@@ -523,6 +526,7 @@ describe("BuildEIP712ContextTask", () => {
       deviceModelId: DeviceModelId.FLEX,
       isSecureConnectionAllowed: false,
     });
+    contextModuleMock.getContexts.mockResolvedValueOnce([]);
     contextModuleMock.getTypedDataFilters.mockResolvedValueOnce(
       clearSignContext,
     );
@@ -538,7 +542,7 @@ describe("BuildEIP712ContextTask", () => {
     expect(builtContext).toStrictEqual({
       deviceModelId: DeviceModelId.FLEX,
       derivationPath: "44'/60'/0'/0/0",
-      transactionChecks: undefined,
+      additionalContexts: [],
       types: TEST_TYPES,
       domain: TEST_DOMAIN_VALUES,
       message: TEST_MESSAGE_VALUES,
